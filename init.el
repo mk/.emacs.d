@@ -19,6 +19,13 @@
 
 (load-theme 'material t)
 
+(global-auto-revert-mode t)
+
+(defun save-all ()
+  (interactive)
+  (save-some-buffers t))
+(add-hook 'focus-out-hook 'save-all)
+
 (setq auto-save-default nil)
 (setq backup-inhibited t)
 (setq ring-bell-function 'ignore)
