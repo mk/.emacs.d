@@ -1,3 +1,9 @@
+;; (require 'cask "~/.cask/cask.el")
+(require 'cask "/usr/local/Cellar/cask/0.8.1/cask.el")
+(cask-initialize)
+(require 'pallet)
+(pallet-mode t)
+
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
@@ -33,6 +39,31 @@
 (setq-default indent-tabs-mode nil)
 (setq tab-width 2)
 (setq-default tab-always-indent nil)
+(setq-default indent-tabs-mode nil)
+
+(defvaralias 'c-basic-offset 'tab-with)
+
+(defun my-setup-indent (n)
+;; java/c/c++
+(setq c-basic-offset n)
+;; web development
+(setq coffee-tab-width n) ; coffeescript
+(setq javascript-indent-level n) ; javascript-mode
+(setq js-indent-level n) ; js-mode
+(setq js2-basic-offset n) ; js2-mode, in latest js2-mode, it's alias of js-indent-level
+(setq web-mode-markup-indent-offset n) ; web-mode, html tag in html file
+(setq web-mode-css-indent-offset n) ; web-mode, css in html file
+(setq web-mode-code-indent-offset n) ; web-mode, js code in html file
+(setq css-indent-offset n) ; css-mode
+(setq-default tab-width 2)
+;; adjust indents for web-mode to 2 spaces
+(defun my-web-mode-hook ()
+ "Hooks for Web mode. Adjust indents"
+   ;;; http://web-mode.org/
+   (my-setup-indent 2))
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(my-setup-indent 2)
 
 (use-package parinfer
   :ensure t
@@ -48,8 +79,7 @@
     (add-hook 'clojure-mode-hook #'parinfer-mode)
     
     (add-hook 'emacs-lisp-mode-hook #'parinfer-mode))
-  (setq parinfer-auto-switch-indent-mode nil))
-    
+  (setq parinfer-auto-switch-indent-mode nil)))
 
 (use-package smartparens-config
   :ensure smartparens
@@ -60,7 +90,8 @@
 
 (use-package projectile
   :bind
-  (("M-t" . projectile-switch-to-buffer)))
+  (("M-t" . projectile-switch-to-buffer))
+  (("M-T" . projectile-find-file)))
 
 (setq show-paren-delay 0)
 (show-paren-mode 1)
