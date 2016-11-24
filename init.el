@@ -118,3 +118,5 @@
 (setq projectile-switch-project-action 'neotree-projectile-action)
 
 (global-set-key (kbd "C-x g") 'magit-status)
+(winner-mode t)
+
