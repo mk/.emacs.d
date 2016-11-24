@@ -108,3 +108,13 @@
 ;; disable ido faces to see flx highlights.
 (setq ido-enable-flex-matching t)
 (setq ido-use-faces nil)
+
+(require 'neotree)
+
+(global-set-key (kbd "M-\\") 'neotree-toggle)
+(global-set-key [f8] 'neotree-toggle)
+
+(setq neo-smart-open 1)
+(setq projectile-switch-project-action 'neotree-projectile-action)
+
+(global-set-key (kbd "C-x g") 'magit-status)
