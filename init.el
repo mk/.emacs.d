@@ -38,6 +38,7 @@
 (setq tab-width 2)
 (setq-default tab-always-indent nil)
 (setq-default indent-tabs-mode nil)
+(setq css-indent-offset 2)
 
 (defvaralias 'c-basic-offset 'tab-with)
 
@@ -111,3 +112,4 @@
 
 (when (file-exists-p "~/.emacs.d/customizations.el")
   (load "~/.emacs.d/customizations.el"))
+
