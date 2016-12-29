@@ -3,3 +3,4 @@ auto-save-list
 .cask
 eshell
 url
+customizations.el
