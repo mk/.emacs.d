@@ -7,6 +7,7 @@
 (depends-on "clojure-mode")
 (depends-on "dash")
 (depends-on "diminish")
+(depends-on "dracula-theme")
 (depends-on "epl")
 (depends-on "exec-path-from-shell")
 (depends-on "f")
