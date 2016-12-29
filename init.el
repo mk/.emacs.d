@@ -109,3 +109,5 @@
 ;; custom themes
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
+(when (file-exists-p "~/.emacs.d/customizations.el")
+  (load "~/.emacs.d/customizations.el"))
