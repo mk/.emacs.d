@@ -1,4 +1,6 @@
 ;; (require 'cask "~/.cask/cask.el")
+;; Run `cask install` to install required packages
+
 (require 'cask "/usr/local/Cellar/cask/0.8.1/cask.el")
 (cask-initialize)
 (require 'pallet)
