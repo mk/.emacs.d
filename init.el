@@ -11,10 +11,6 @@
              '("gnu" . "http://elpa.gnu.org/packages/") t)
 (package-initialize)
 
-(defun gugl/mac? ()
-  "Returns `t' if this is an Apple machine, nil otherwise."
-  (eq system-type 'darwin))
-
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)
   (setq mac-option-modifier 'super)
@@ -88,10 +84,27 @@
 
 (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 
+(require 'helm-config)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x f") 'helm-find)
+
+(helm-mode 1)
+
 (use-package projectile
   :bind
   (("M-t" . projectile-switch-to-buffer))
   (("M-T" . projectile-find-file)))
+
+;; turns on projectile mode by default for all file types
+(projectile-global-mode)
+
+(require 'helm-projectile)
+
+;; asks for file to open when project is switched
+(setq projectile-switch-project-action 'helm-projectile-find-file)
+
+(helm-projectile-on)
 
 (setq show-paren-delay 0)
 (show-paren-mode 1)
@@ -100,14 +113,6 @@
   (interactive)
   (cider-connect "localhost" "7888")
   (cider-create-sibling-cljs-repl (cider-current-connection)))
-
-(require 'flx-ido)
-(ido-mode 1)
-(ido-everywhere 1)
-(flx-ido-mode 1)
-;; disable ido faces to see flx highlights.
-(setq ido-enable-flex-matching t)
-(setq ido-use-faces nil)
 
 (require 'neotree)
 
@@ -119,4 +124,7 @@
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (winner-mode t)
+
+;; custom themes
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 

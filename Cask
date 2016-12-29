@@ -12,6 +12,8 @@
 (depends-on "f")
 (depends-on "flx")
 (depends-on "flx-ido")
+(depends-on "helm")
+(depends-on "helm-projectile")
 (depends-on "magit")
 (depends-on "material-theme")
 (depends-on "package-build")
