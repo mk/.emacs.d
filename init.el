@@ -1,115 +1,49 @@
-;; (require 'cask "~/.cask/cask.el")
-;; Run `cask install` to install required packages
-
-(require 'cask "/usr/local/Cellar/cask/0.8.1/cask.el")
-(cask-initialize)
-(require 'pallet)
-(pallet-mode t)
-
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("gnu" . "http://elpa.gnu.org/packages/") t)
 (package-initialize)
 
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize)
-  (setq mac-option-modifier 'super)
-  (setq mac-command-modifier 'meta))
-  
-(tool-bar-mode -1)
-(global-linum-mode 1)
-
-(load-theme 'material t)
-
-(global-auto-revert-mode t)
-
-(defun save-all ()
-  (interactive)
-  (save-some-buffers t))
-(add-hook 'focus-out-hook 'save-all)
-
-(setq auto-save-default nil)
-(setq backup-inhibited t)
-(setq ring-bell-function 'ignore)
-(setq default-truncate-lines t)
-(setq-default indent-tabs-mode nil)
-(setq tab-width 2)
-(setq-default tab-always-indent nil)
-(setq-default indent-tabs-mode nil)
-(setq css-indent-offset 2)
-
-(defvaralias 'c-basic-offset 'tab-with)
-
-(use-package parinfer
-  :ensure t
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-   (setq parinfer-auto-switch-indent-mode nil)))
-
-(use-package smartparens-config
-  :ensure smartparens
-  :bind
-  (("M-<up>" . sp-up-sexp)))
-
-(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-
-(require 'helm-config)
-
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x f") 'helm-find)
-
-(helm-mode 1)
-
-(use-package projectile
-  :bind
-  (("M-t" . projectile-switch-to-buffer))
-  (("M-T" . projectile-find-file)))
-
-;; turns on projectile mode by default for all file types
-(projectile-global-mode)
-
-(require 'helm-projectile)
-(setq helm-M-x-fuzzy-match 1)
-
-;; asks for file to open when project is switched
-(setq projectile-switch-project-action 'helm-projectile-find-file)
-
-(helm-projectile-on)
-
-(setq show-paren-delay 0)
-(show-paren-mode 1)
-
-(defun cider-connect-cljs ()
-  (interactive)
-  (cider-connect "localhost" "7888")
-  (cider-create-sibling-cljs-repl (cider-current-connection)))
-
-(require 'neotree)
-
-(global-set-key (kbd "M-\\") 'neotree-toggle)
-(global-set-key [f8] 'neotree-toggle)
-
-(setq neo-smart-open 1)
-(setq projectile-switch-project-action 'neotree-projectile-action)
-
-(global-set-key (kbd "C-x g") 'magit-status)
-(winner-mode t)
-
-;; custom themes
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-
-(when (file-exists-p "~/.emacs.d/customizations.el")
-  (load "~/.emacs.d/customizations.el"))
-
+(org-babel-load-file "~/.emacs.d/configuration.org")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   (vector "#ffffff" "#f36c60" "#8bc34a" "#fff59d" "#4dd0e1" "#b39ddb" "#81d4fa" "#263238"))
+ '(custom-enabled-themes (quote (dracula)))
+ '(custom-safe-themes
+   (quote
+    ("eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" default)))
+ '(fci-rule-color "#37474f")
+ '(hl-sexp-background-color "#1c1f26")
+ '(package-selected-packages
+   (quote
+    (dumb-jump sass-mode dracula-theme use-package smartparens rainbow-mode parinfer pallet neotree material-theme magit helm-projectile flx-ido exec-path-from-shell cider)))
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#f36c60")
+     (40 . "#ff9800")
+     (60 . "#fff59d")
+     (80 . "#8bc34a")
+     (100 . "#81d4fa")
+     (120 . "#4dd0e1")
+     (140 . "#b39ddb")
+     (160 . "#f36c60")
+     (180 . "#ff9800")
+     (200 . "#fff59d")
+     (220 . "#8bc34a")
+     (240 . "#81d4fa")
+     (260 . "#4dd0e1")
+     (280 . "#b39ddb")
+     (300 . "#f36c60")
+     (320 . "#ff9800")
+     (340 . "#fff59d")
+     (360 . "#8bc34a"))))
+ '(vc-annotate-very-old-color nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

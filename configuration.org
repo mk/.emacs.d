@@ -1,0 +1,226 @@
+* Package Management
+This configuration assumes that you installed cask via homebrew.
+If you installed cask via curl you might need to change the past to “~/.cask/cask.el”.\ In order to install cask and pallet follow the Installation section on https://github.com/rdallasgray/pallet.
+
+After you installed cask visit your “~/.emacs.d” directory and run cask install in it.
+Now just start emacs and you’re all set.\ Every package you will install via package-list or package-install will be automatically added to your Cask file as a dependency of your configuration.
+
+Run `cask install` to install required packages
+
+#+BEGIN_SRC emacs-lisp
+(require 'cask "/usr/local/Cellar/cask/0.8.1/cask.el")
+(cask-initialize)
+(require 'pallet)
+(pallet-mode t)
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("gnu" . "http://elpa.gnu.org/packages/") t)
+#+END_SRC
+* Tabs
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+
+* Projectile
+
+#+BEGIN_SRC emacs-lisp
+(require 'projectile)
+
+(add-to-list 'projectile-globally-ignored-directories "*/priv")
+
+(global-set-key (kbd "M-t") 'projectile-switch-to-buffer)
+(global-set-key (kbd "M-T") 'projectile-find-file)
+
+(projectile-global-mode)
+
+#+END_SRC
+
+* Org Mode
+
+Syntax highlighting in code snippets
+
+#+BEGIN_SRC emacs-lisp
+(setq org-src-fontify-natively t)
+#+END_SRC
+
+Make TAB act as if it were issued in a buffer of the language’s major mode.
+#+BEGIN_SRC emacs-lisp
+(setq org-src-tab-acts-natively t)
+#+END_SRC
+
+Make windmove work in org-mode where it does not have special org-mode meaning. See the discussion here to read the full story.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+#+END_SRC
+
+* Window Management
+
+Navigate between windows using Alt-1, Alt-2, Shift-left, shift-up, shift-right
+
+Also use M-o to switch to the next window
+
+#+BEGIN_SRC emacs-lisp
+(windmove-default-keybindings)
+(global-set-key (kbd "M-o") 'other-window)
+#+END_SRC
+
+You can use C-c left or C-c right to switch to the prev or next window configuration. This is very useful when you want to focus on one single buffer but want to go back to your old more complex window configuration.
+
+#+BEGIN_SRC emacs-lisp
+(winner-mode t)
+#+END_SRC
+
+* The Mess
+
+#+BEGIN_SRC emacs-lisp
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (setq mac-option-modifier 'super)
+  (setq mac-command-modifier 'meta))
+  
+(tool-bar-mode -1)
+(global-linum-mode 1)
+
+(load-theme 'material t)
+
+(global-auto-revert-mode t)
+
+(defun save-all ()
+  (interactive)
+  (save-some-buffers t))
+(add-hook 'focus-out-hook 'save-all)
+
+(setq auto-save-default nil)
+(setq backup-inhibited t)
+(setq ring-bell-function 'ignore)
+(setq default-truncate-lines t)
+(setq-default indent-tabs-mode nil)
+(setq tab-width 2)
+(setq css-indent-offset 2)
+
+(defvaralias 'c-basic-offset 'tab-with)
+
+(use-package parinfer
+  :ensure t
+  :bind
+  (("C-," . parinfer-toggle-mode))
+  :init
+  (progn
+    (setq parinfer-extensions
+          '(defaults       ; should be included.
+            pretty-parens  ; different paren styles for different modes.
+            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+            smart-yank))   ; Yank behavior depend on mode.
+    (add-hook 'clojure-mode-hook #'parinfer-mode)
+    
+    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+   (setq parinfer-auto-switch-indent-mode nil)))
+
+(use-package smartparens-config
+  :ensure smartparens
+  :bind
+  (("M-<up>" . sp-up-sexp)))
+
+(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+(add-hook 'clojure-mode-hook #'dumb-jump-mode)
+
+(require 'helm-config)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x f") 'helm-find)
+
+(helm-mode 1)
+
+(require 'helm-projectile)
+;; asks for file to open when project is switched
+(setq projectile-switch-project-action 'helm-projectile-find-file)
+(helm-projectile-on)
+(setq projectile-switch-project-action 'neotree-projectile-action)
+
+
+(setq helm-M-x-fuzzy-match 1)
+
+
+(setq show-paren-delay 0)
+(show-paren-mode 1)
+
+(defun cider-connect-cljs ()
+  (interactive)
+  (cider-connect "localhost" "7888")
+  (cider-create-sibling-cljs-repl (cider-current-connection)))
+
+(require 'neotree)
+
+(global-set-key (kbd "M-\\") 'neotree-toggle)
+(global-set-key [f8] 'neotree-toggle)
+
+(setq neo-smart-open 1)
+
+(global-set-key (kbd "C-x g") 'magit-status)
+(winner-mode t)
+
+;; custom themes
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+(when (file-exists-p "~/.emacs.d/customizations.el")
+  (load "~/.emacs.d/customizations.el"))
+
+(add-hook 'css-mode-hook #'smartparens-strict-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   (vector "#ffffff" "#f36c60" "#8bc34a" "#fff59d" "#4dd0e1" "#b39ddb" "#81d4fa" "#263238"))
+ '(custom-enabled-themes (quote (dracula)))
+ '(custom-safe-themes
+   (quote
+    ("eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" default)))
+ '(fci-rule-color "#37474f")
+ '(hl-sexp-background-color "#1c1f26")
+ '(package-selected-packages
+   (quote
+    (sass-mode dracula-theme use-package smartparens rainbow-mode parinfer pallet neotree material-theme magit helm-projectile flx-ido exec-path-from-shell cider)))
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#f36c60")
+     (40 . "#ff9800")
+     (60 . "#fff59d")
+     (80 . "#8bc34a")
+     (100 . "#81d4fa")
+     (120 . "#4dd0e1")
+     (140 . "#b39ddb")
+     (160 . "#f36c60")
+     (180 . "#ff9800")
+     (200 . "#fff59d")
+     (220 . "#8bc34a")
+     (240 . "#81d4fa")
+     (260 . "#4dd0e1")
+     (280 . "#b39ddb")
+     (300 . "#f36c60")
+     (320 . "#ff9800")
+     (340 . "#fff59d")
+     (360 . "#8bc34a"))))
+ '(vc-annotate-very-old-color nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+#+END_SRC
