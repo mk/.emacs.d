@@ -19,6 +19,7 @@
 (depends-on "helm-ag")
 (depends-on "helm-projectile")
 (depends-on "magit")
+(depends-on "markdown-mode+")
 (depends-on "material-theme")
 (depends-on "package-build")
 (depends-on "pallet")
