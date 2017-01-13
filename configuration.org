@@ -175,6 +175,8 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 (when (file-exists-p "~/.emacs.d/customizations.el")
   (load "~/.emacs.d/customizations.el"))
 
+(load "~/.emacs.d/smartparens.el")
 (add-hook 'css-mode-hook #'smartparens-strict-mode)
 
 #+END_SRC
+
