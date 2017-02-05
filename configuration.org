@@ -110,6 +110,17 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 
 (defvaralias 'c-basic-offset 'tab-with)
 
+(defun kommen-new-empty-buffer ()
+  "Create a new empty buffer.
+New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc."
+  (interactive)
+  (let ((-buf (generate-new-buffer "untitled")))
+    (switch-to-buffer -buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)))
+ 
+  (global-set-key (kbd "C-x n") 'kommen-new-empty-buffer)
+
 (use-package parinfer
   :ensure t
   :bind
