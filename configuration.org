@@ -172,21 +172,12 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 
 (setq inf-clojure-program '("localhost" . 5555))
 
-(require 'helm-config)
-
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x f") 'helm-find)
-
-(helm-mode 1)
-
-(require 'helm-projectile)
-;; asks for file to open when project is switched
-(setq projectile-switch-project-action 'helm-projectile-find-file)
-(helm-projectile-on)
-(setq projectile-switch-project-action 'neotree-projectile-action)
 
 
-(setq helm-M-x-fuzzy-match 1)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "M-t") 'counsel-projectile)
+
+;(setq helm-M-x-fuzzy-match 1)
 
 
 (setq show-paren-delay 0)
@@ -214,3 +205,49 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 
 #+END_SRC
 
+
+* Ivy, Counsel Swipe
+** Better completion wity ivy, swiper and counsel
+*** Ivy
+Better replacement for ~ido-mode~ as the completion system.
+For more information see http://oremacs.com/2015/04/16/ivy-mode/
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :defer 2
+    :config
+    (ivy-mode 1))
+#+END_SRC
+*** Counsel
+~ivy-mode~ ensures that any Emacs command using ~completing-read-function~ uses ivy for completion.
+Counsel takes this further, providing versions of common Emacs commands that are customised to make the best use of ivy.
+For example, ~counsel-find-file~ has some additional keybindings. Pressing ~DEL~ will move you to the parent directory.
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :defer 2
+    :bind (("C-x C-f" . counsel-find-file)))
+#+END_SRC
+#+RESULTS:
+*** Counsel Projectile
+~counsel-projectile~ adds counsel goodness to some projectile commands from projectile-find-file to projectile-ag.
+See the full list at https://github.com/ericdanan/counsel-projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :defer 2
+    :config
+    (counsel-projectile-on))
+#+END_SRC
+*** Counsel OSX App
+With ~counsel-osx-app~ you can start macOS Applications from within emacs using M-x counsel-osx-app.
+https://github.com/d12frosted/counsel-osx-app
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-osx-app
+    :defer 3)
+#+END_SRC
+*** Swiper for better isearch
+Replacement for isearch. It's awesome.
+You can get a really good overview in the minibuffer.
+For more information see https://github.com/abo-abo/swiper
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :bind ("C-s" . swiper))
+#+END_SRC
