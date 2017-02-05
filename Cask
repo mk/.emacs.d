@@ -3,7 +3,6 @@
 
 (depends-on "bind-key")
 (depends-on "cask")
-(depends-on "cider")
 (depends-on "clojure-mode")
 (depends-on "company")
 (depends-on "dash")
@@ -18,6 +17,7 @@
 (depends-on "helm")
 (depends-on "helm-ag")
 (depends-on "helm-projectile")
+(depends-on "inf-clojure")
 (depends-on "magit")
 (depends-on "markdown-mode+")
 (depends-on "material-theme")

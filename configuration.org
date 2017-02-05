@@ -131,8 +131,13 @@ You can use C-c left or C-c right to switch to the prev or next window configura
   :bind
   (("M-<up>" . sp-up-sexp)))
 
+(require 'smartparens-clojure)
+
 (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 (add-hook 'clojure-mode-hook #'dumb-jump-mode)
+(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+
+(setq inf-clojure-program '("localhost" . 5555))
 
 (require 'helm-config)
 
@@ -154,10 +159,6 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 (setq show-paren-delay 0)
 (show-paren-mode 1)
 
-(defun cider-connect-cljs ()
-  (interactive)
-  (cider-connect "localhost" "7888")
-  (cider-create-sibling-cljs-repl (cider-current-connection)))
 
 (require 'neotree)
 
