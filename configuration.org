@@ -80,6 +80,9 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 * The Mess
 
 #+BEGIN_SRC emacs-lisp
+
+(server-start)
+
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 
