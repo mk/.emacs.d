@@ -16,6 +16,7 @@
 (depends-on "magit")
 (depends-on "markdown-mode+")
 (depends-on "material-theme")
+(depends-on "neotree")
 (depends-on "package-build")
 (depends-on "pallet")
 (depends-on "parinfer")
