@@ -8,17 +8,23 @@ Now just start emacs and you’re all set.\ Every package you will install via p
 Run `cask install` to install required packages
 
 #+BEGIN_SRC emacs-lisp
-(require 'cask "/usr/local/Cellar/cask/0.8.1/cask.el")
-(cask-initialize)
-(require 'pallet)
-(pallet-mode t)
+  (require 'cask "/usr/local/Cellar/cask/0.8.1/cask.el")
+  (cask-initialize)
+  (require 'pallet)
+  (pallet-mode t)
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (setq use-package-always-ensure t)
+  (setq use-package-verbose t)
 #+END_SRC
+
+#+RESULTS:
+: t
+
 * Tabs
 #+BEGIN_SRC emacs-lisp
 
@@ -27,16 +33,18 @@ Run `cask install` to install required packages
 * Projectile
 
 #+BEGIN_SRC emacs-lisp
-(require 'projectile)
+  (require 'projectile)
 
-(add-to-list 'projectile-globally-ignored-directories "*/priv")
-
-(global-set-key (kbd "M-t") 'projectile-switch-to-buffer)
-(global-set-key (kbd "M-T") 'projectile-find-file)
-
-(projectile-global-mode)
+  (add-to-list 'projectile-globally-ignored-directories "*/priv")
+  (setq projectile-switch-project-action 'neotree-projectile-action)
+  (global-set-key (kbd "M-t") 'projectile-find-file)
+  (setq projectile-enable-caching t)
+  (projectile-global-mode)
 
 #+END_SRC
+
+#+RESULTS:
+: t
 
 * Org Mode
 
@@ -81,132 +89,155 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 
 #+BEGIN_SRC emacs-lisp
 
-(server-start)
+  (server-start)
 
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
+  (require 'company)
+  (add-hook 'after-init-hook 'global-company-mode)
 
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize)
-  (setq mac-option-modifier 'super)
-  (setq mac-command-modifier 'meta))
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)
+    (setq mac-option-modifier 'super)
+    (setq mac-command-modifier 'meta))
 
-(defun rename-current-buffer-file ()
-  "Renames current buffer and file it is visiting."
-  (interactive)
-  (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (error "Buffer '%s' is not visiting a file!" name)
-      (let ((new-name (read-file-name "New name: " filename)))
-        (if (get-buffer new-name)
-            (error "A buffer named '%s' already exists!" new-name)
-          (rename-file filename new-name 1)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil)
-          (message "File '%s' successfully renamed to '%s'"
-                   name (file-name-nondirectory new-name)))))))
+  (defun rename-current-buffer-file ()
+    "Renames current buffer and file it is visiting."
+    (interactive)
+    (let ((name (buffer-name))
+          (filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (error "Buffer '%s' is not visiting a file!" name)
+        (let ((new-name (read-file-name "New name: " filename)))
+          (if (get-buffer new-name)
+              (error "A buffer named '%s' already exists!" new-name)
+            (rename-file filename new-name 1)
+            (rename-buffer new-name)
+            (set-visited-file-name new-name)
+            (set-buffer-modified-p nil)
+            (message "File '%s' successfully renamed to '%s'"
+                     name (file-name-nondirectory new-name)))))))
 
-(global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
+  (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
 
-(tool-bar-mode -1)
-(global-linum-mode 1)
+  (tool-bar-mode -1)
+  (global-linum-mode 1)
 
-(load-theme 'material t)
+  (load-theme 'material t)
 
-(global-auto-revert-mode t)
+  (global-auto-revert-mode t)
 
-(defun save-all ()
-  (interactive)
-  (save-some-buffers t))
-(add-hook 'focus-out-hook 'save-all)
+  (defun save-all ()
+    (interactive)
+    (save-some-buffers t))
+  (add-hook 'focus-out-hook 'save-all)
 
-(setq auto-save-default nil)
-(setq backup-inhibited t)
-(setq ring-bell-function 'ignore)
-(setq default-truncate-lines t)
-(setq-default indent-tabs-mode nil)
-(setq tab-width 2)
-(setq css-indent-offset 2)
+  (setq auto-save-default nil)
+  (setq backup-inhibited t)
+  (setq ring-bell-function 'ignore)
+  (setq default-truncate-lines t)
+  (setq-default indent-tabs-mode nil)
+  (setq tab-width 2)
+  (setq css-indent-offset 2)
 
-(defvaralias 'c-basic-offset 'tab-with)
+  (defvaralias 'c-basic-offset 'tab-with)
 
-(defun kommen-new-empty-buffer ()
-  "Create a new empty buffer.
-New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc."
-  (interactive)
-  (let ((-buf (generate-new-buffer "untitled")))
-    (switch-to-buffer -buf)
-    (funcall initial-major-mode)
-    (setq buffer-offer-save t)))
- 
-  (global-set-key (kbd "C-x n") 'kommen-new-empty-buffer)
+  (defun kommen-new-empty-buffer ()
+    "Create a new empty buffer.
+  New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc."
+    (interactive)
+    (let ((-buf (generate-new-buffer "untitled")))
+      (switch-to-buffer -buf)
+      (funcall initial-major-mode)
+      (setq buffer-offer-save t)))
+   
+    (global-set-key (kbd "C-x n") 'kommen-new-empty-buffer)
 
-(use-package parinfer
-  :ensure t
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-   (setq parinfer-auto-switch-indent-mode nil)))
+  (use-package parinfer
+    :ensure t
+    :bind
+    (("C-," . parinfer-toggle-mode))
+    :init
+    (progn
+      (setq parinfer-extensions
+            '(defaults       ; should be included.
+              pretty-parens  ; different paren styles for different modes.
+              smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+              smart-yank))   ; Yank behavior depend on mode.
+      (add-hook 'clojure-mode-hook #'parinfer-mode)
+      
+      (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+     (setq parinfer-auto-switch-indent-mode nil)))
 
-(use-package smartparens-config
-  :ensure smartparens
-  :bind
-  (("M-<up>" . sp-up-sexp)))
+  (use-package smartparens-config
+    :ensure smartparens
+    :bind
+    (("M-<up>" . sp-up-sexp)))
 
-(require 'smartparens-clojure)
+  (require 'smartparens-clojure)
+  (sp-local-pair 'clojure-mode "{" nil :unless '(sp-in-string-p))
+  (sp-local-pair 'clojure-mode "[" nil :unless '(sp-in-string-p))
+  (sp-local-pair 'clojure-mode "(" nil :unless '(sp-in-string-p))
 
-(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-(add-hook 'clojure-mode-hook #'dumb-jump-mode)
-(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+  (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+  (add-hook 'clojure-mode-hook #'dumb-jump-mode)
+  (add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
 
-(setq inf-clojure-program '("localhost" . 5555))
-
-
-
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "M-t") 'counsel-projectile)
-
-;(setq helm-M-x-fuzzy-match 1)
-
-
-(setq show-paren-delay 0)
-(show-paren-mode 1)
+  ;(setq inf-clojure-program '("localhost" . 5555))
+  (setq inf-clojure-program "boot -C repl -c")
+  (defun run-boot-repl (x)
+    (interactive "sEnter Port Number:")
+    (run-clojure (format  "boot -C repl -cp %s" x)))
 
 
-(require 'neotree)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
 
-(global-set-key (kbd "M-\\") 'neotree-toggle)
-(global-set-key [f8] 'neotree-toggle)
+  (setq show-paren-delay 0)
+  (show-paren-mode 1)
 
-(setq neo-smart-open 1)
 
-(global-set-key (kbd "C-x g") 'magit-status)
-(winner-mode t)
+  (require 'neotree)
 
-;; custom themes
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+  (global-set-key (kbd "M-\\") 'neotree-toggle)
+  (global-set-key [f8] 'neotree-toggle)
 
-(when (file-exists-p "~/.emacs.d/customizations.el")
-  (load "~/.emacs.d/customizations.el"))
+  (setq neo-smart-open 1)
 
-(load "~/.emacs.d/smartparens.el")
-(add-hook 'css-mode-hook #'smartparens-strict-mode)
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (winner-mode t)
+
+  ;; custom themes
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+  (when (file-exists-p "~/.emacs.d/customizations.el")
+    (load "~/.emacs.d/customizations.el"))
+
+  (load "~/.emacs.d/smartparens.el")
+  (add-hook 'css-mode-hook #'smartparens-strict-mode)
 
 #+END_SRC
 
+#+RESULTS:
+| smartparens-strict-mode |
+
+  
+** Packages
+#+BEGIN_SRC emacs-lisp
+  (use-package guide-key
+    :config
+    (setq guide-key/guide-key-sequence t)
+    (guide-key-mode 1))
+
+#+END_SRC
+
+#+RESULTS:
+: t
 
 * Ivy, Counsel Swipe
+#+BEGIN_SRC emacs-lisp
+(use-package ag)
+#+END_SRC
+
+#+RESULTS:
+
 ** Better completion wity ivy, swiper and counsel
 *** Ivy
 Better replacement for ~ido-mode~ as the completion system.
@@ -214,6 +245,7 @@ For more information see http://oremacs.com/2015/04/16/ivy-mode/
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :defer 2
+    :diminish t
     :config
     (ivy-mode 1))
 #+END_SRC
