@@ -181,7 +181,7 @@ You can use C-c left or C-c right to switch to the prev or next window configura
   (add-hook 'clojure-mode-hook #'dumb-jump-mode)
   (add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
 
-  ;(setq inf-clojure-program '("localhost" . 5555))
+  
   (setq inf-clojure-program "boot -C repl -c")
   (defun run-boot-repl (x)
     (interactive "sEnter Port Number:")
