@@ -121,8 +121,6 @@ You can use C-c left or C-c right to switch to the prev or next window configura
   (tool-bar-mode -1)
   (global-linum-mode 1)
 
-  (load-theme 'material t)
-
   (global-auto-revert-mode t)
 
   (defun save-all ()
@@ -148,7 +146,7 @@ You can use C-c left or C-c right to switch to the prev or next window configura
       (switch-to-buffer -buf)
       (funcall initial-major-mode)
       (setq buffer-offer-save t)))
-   
+
     (global-set-key (kbd "C-x n") 'kommen-new-empty-buffer)
 
   (use-package parinfer
@@ -163,7 +161,7 @@ You can use C-c left or C-c right to switch to the prev or next window configura
               smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
               smart-yank))   ; Yank behavior depend on mode.
       (add-hook 'clojure-mode-hook #'parinfer-mode)
-      
+
       (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
      (setq parinfer-auto-switch-indent-mode nil)))
 
@@ -181,7 +179,7 @@ You can use C-c left or C-c right to switch to the prev or next window configura
   (add-hook 'clojure-mode-hook #'dumb-jump-mode)
   (add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
 
-  
+
   (setq inf-clojure-program "boot -C repl -c")
   (defun run-boot-repl (x)
     (interactive "sEnter Port Number:")
@@ -206,6 +204,7 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 
   ;; custom themes
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+  (load-theme 'dracula t)
 
   (when (file-exists-p "~/.emacs.d/customizations.el")
     (load "~/.emacs.d/customizations.el"))
@@ -218,7 +217,7 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 #+RESULTS:
 | smartparens-strict-mode |
 
-  
+
 ** Packages
 #+BEGIN_SRC emacs-lisp
   (use-package guide-key
