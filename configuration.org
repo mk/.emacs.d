@@ -1,4 +1,4 @@
-* Package Management
+f* Package Management
 This configuration assumes that you installed cask via homebrew.
 If you installed cask via curl you might need to change the past to “~/.cask/cask.el”.\ In order to install cask and pallet follow the Installation section on https://github.com/rdallasgray/pallet.
 
@@ -149,36 +149,23 @@ You can use C-c left or C-c right to switch to the prev or next window configura
 
     (global-set-key (kbd "C-x n") 'kommen-new-empty-buffer)
 
-  (use-package parinfer
+  (use-package clojure-mode
     :ensure t
-    :bind
-    (("C-," . parinfer-toggle-mode))
-    :init
-    (progn
-      (setq parinfer-extensions
-            '(defaults       ; should be included.
-              pretty-parens  ; different paren styles for different modes.
-              smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-              smart-yank))   ; Yank behavior depend on mode.
-      (add-hook 'clojure-mode-hook #'parinfer-mode)
-
-      (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-     (setq parinfer-auto-switch-indent-mode nil)))
-
-  (use-package smartparens-config
-    :ensure smartparens
-    :bind
-    (("M-<up>" . sp-up-sexp)))
-
-  (require 'smartparens-clojure)
-  (sp-local-pair 'clojure-mode "{" nil :unless '(sp-in-string-p))
-  (sp-local-pair 'clojure-mode "[" nil :unless '(sp-in-string-p))
-  (sp-local-pair 'clojure-mode "(" nil :unless '(sp-in-string-p))
-
-  (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-  (add-hook 'clojure-mode-hook #'dumb-jump-mode)
-  (add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
-
+    :config
+    (use-package paredit
+      :ensure t
+      :config
+      (add-hook 'clojure-mode-hook 'paredit-mode))
+    
+    (use-package rainbow-delimiters
+      :ensure t
+      :config
+      (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
+    
+    (add-hook 'clojure-mode-hook 'dumb-jump-mode)
+    (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode))
+    
+    
 
   (setq inf-clojure-program "boot -C repl -c")
   (defun run-boot-repl (x)
